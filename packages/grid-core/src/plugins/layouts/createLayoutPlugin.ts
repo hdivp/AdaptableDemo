@@ -4,7 +4,7 @@ import type {
   GridApi,
 } from "ag-grid-community";
 import type { GridPlugin } from "../../types";
-import type { LayoutActions } from "./LayoutPopup";
+import type { LayoutActions } from "./layoutActions";
 import { generateLayoutId, validateLayoutName } from "./layoutRules";
 import { applyLayoutState, captureLayoutState, resetToDefault } from "./layoutState";
 import { createLayoutStore } from "./layoutStore";
@@ -41,7 +41,7 @@ export function createLayoutPlugin<TRow = unknown>(
   let boundPivotMode = false;
 
   // Every action changes the store first, then tells the consumer once. Each
-  // returns an error message for the pop-up, or null when it worked.
+  // returns an error message for the toolbar, or null when it worked.
   const actions: LayoutActions = {
     create(rawName) {
       const { api } = store;
@@ -80,6 +80,21 @@ export function createLayoutPlugin<TRow = unknown>(
       store.update(layout);
       store.setCurrent(id);
       options.onLayoutUpdate?.(layout);
+      return null;
+    },
+    rename(id, rawName) {
+      const { layouts } = store.getSnapshot();
+      const layout = layouts.find((item) => item.id === id);
+      if (!layout) {
+        return NOT_FOUND;
+      }
+      const check = validateLayoutName(rawName, layouts, id);
+      if (!check.ok) {
+        return check.message;
+      }
+      const renamed: GridLayout = { ...layout, name: check.name };
+      store.update(renamed);
+      options.onLayoutUpdate?.(renamed);
       return null;
     },
     remove(id) {
@@ -123,6 +138,7 @@ export function createLayoutPlugin<TRow = unknown>(
 
   const plugin: GridPlugin<TRow> = {
     id: "layouts",
+    toolbarTitle: "Layout",
     applyGridOptions: (gridOptions) => {
       boundPivotMode = gridOptions.pivotMode ?? false;
       return gridOptions;

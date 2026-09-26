@@ -1,0 +1,8 @@
+feature: Toolbar dashboard
+slug: toolbar-dashboard
+stage: done
+gate: closed
+question_rounds: 0
+retries_developer: 0
+fsd_source: .aidlc/toolbar-dashboard/01-fsd.md
+updated: 2026-09-26

@@ -12,7 +12,8 @@ export function createActionsPlugin<TRow = unknown>(
   options: ActionsPluginOptions,
 ): ActionsPluginHandle<TRow> {
   const plugin: GridPlugin<TRow> = {
-    id: "actions",
+    id: options.id ?? "actions",
+    toolbarTitle: options.title,
     ToolbarItem: createActionsToolbarItem<TRow>(options.actions),
   };
   return { plugin };

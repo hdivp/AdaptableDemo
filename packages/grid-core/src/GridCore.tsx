@@ -9,6 +9,7 @@ import "./GridCore.css";
 import type { GridApi, GridReadyEvent } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Dashboard } from "./dashboard/Dashboard";
 import { applyLicence } from "./internal/licence";
 import { buildGridOptions } from "./internal/buildGridOptions";
 import { foldGridOptions, startPlugins } from "./internal/runPlugins";
@@ -68,26 +69,28 @@ export function GridCore<TRow>({
     [],
   );
 
-  const toolbarItems = plugins.filter((plugin) => plugin.ToolbarItem);
-  const showToolbar = api !== null && toolbarItems.length > 0;
+  // Quick search text. Held here so it survives the grid being re-created.
+  const [quickFilterText, setQuickFilterText] = useState("");
+
+  const toolbars = plugins.filter((plugin) => plugin.ToolbarItem);
+  const showDashboard = api !== null && toolbars.length > 0;
+  // While the dashboard shows, its quick search wins over any
+  // `agGridOptions.quickFilterText`, so it goes after the options spread.
+  const quickFilter = showDashboard ? { quickFilterText } : undefined;
 
   return (
     <div className={className ? `gridcore-root ${className}` : "gridcore-root"}>
-      {showToolbar && (
-        <div className="gridcore-toolbar">
-          {toolbarItems.map((plugin) => {
-            const ToolbarItem = plugin.ToolbarItem!;
-            return (
-              <ToolbarItem
-                key={plugin.id}
-                ctx={{ gridId: config.gridId, api: api!, config }}
-              />
-            );
-          })}
-        </div>
+      {showDashboard && (
+        <Dashboard
+          config={config}
+          toolbars={toolbars}
+          ctx={{ gridId: config.gridId, api: api!, config }}
+          quickFilterText={quickFilterText}
+          onQuickFilterTextChange={setQuickFilterText}
+        />
       )}
       <div className={`gridcore-viewport ${themeClass}`} style={{ height }}>
-        <AgGridReact<TRow> {...gridOptions} onGridReady={handleGridReady} />
+        <AgGridReact<TRow> {...gridOptions} {...quickFilter} onGridReady={handleGridReady} />
       </div>
       {loading && <div className="gridcore-overlay">Loading…</div>}
     </div>

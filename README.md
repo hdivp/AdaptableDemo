@@ -118,8 +118,14 @@ const myFeature: GridPlugin<Trade> = {
     return () => { /* undo */ };
   },
 
-  // 3. Render a control in the wrapper toolbar.
-  ToolbarItem: ({ ctx }) => <button onClick={() => ctx.api.sizeColumnsToFit()}>Fit</button>,
+  // 3. Render a control in its own dashboard panel.
+  ToolbarItem: ({ ctx }) => (
+    <button type="button" className="gridcore-btn" onClick={() => ctx.api.sizeColumnsToFit()}>
+      Fit
+    </button>
+  ),
+  // Title of that panel. Falls back to `id`.
+  toolbarTitle: "My feature",
 };
 ```
 
@@ -133,7 +139,82 @@ That shape covers the planned work:
 - **Saved layouts** uses `onGridReady` to push column state through the api,
   plus a `ToolbarItem` for the layout picker.
 
-The toolbar only appears when at least one plugin supplies a `ToolbarItem`.
+## The dashboard
+
+When at least one plugin supplies a `ToolbarItem`, a dashboard shows above the
+grid. With none, there is no dashboard and the grid renders on its own.
+
+The dashboard has a header (title, tabs, quick search, a settings gear and a
+collapse button) and, under it, one bordered panel per plugin toolbar. Each
+panel has an uppercase title strip and a × that hides it on the current tab.
+The gear brings hidden panels back. Tab choice, hidden panels and the collapsed
+state live in memory and reset on reload.
+
+Two config fields shape it:
+
+```ts
+const config: GridCoreConfig<Trade> = {
+  gridId: "demo-trades",
+  title: "Trades",          // header title; falls back to gridId
+  tabs: [                   // plugin ids, in display order
+    { name: "Trading", toolbars: ["layouts", "columns"] },
+    { name: "Export", toolbars: ["export"] },
+    { name: "All", toolbars: ["layouts", "export", "columns"] },
+  ],
+  plugins: [/* ... */],
+  columns: [/* ... */],
+};
+```
+
+- `title` is the header text. When it is set, the `gridId` also shows after it
+  in small muted text.
+- `tabs` lists named tabs. Unknown and repeated ids are ignored. With no
+  `tabs`, or an empty list, one "Toolbars" tab shows every toolbar in
+  `config.plugins` order. The first tab starts selected.
+- A panel's title is its plugin's `toolbarTitle`, or the plugin `id` when it
+  has none. The actions plugin takes `id` and `title` options, so one factory
+  can make several panels:
+
+  ```ts
+  createActionsPlugin({ id: "export", title: "Export", actions: ["exportCsv", "exportExcel"] });
+  createActionsPlugin({ id: "columns", title: "Columns", actions: ["autosizeColumns", "fitColumns"] });
+  ```
+
+Quick search uses AG Grid's quick filter over the visible columns. While the
+dashboard shows, its text wins over any `agGridOptions.quickFilterText`.
+
+The dashboard is light only. It does not follow the operating system's dark
+mode.
+
+### Making a panel match the others
+
+A `ToolbarItem` renders inside the panel body, which is a wrapping flex row.
+Use the shared classes so a new panel looks like the built-in ones:
+
+| Class | Use it on |
+| --- | --- |
+| `gridcore-btn` | any button |
+| `gridcore-btn gridcore-btn--primary` | the one main action in a panel |
+| `gridcore-btn gridcore-btn--icon` | an icon-only button; also give it `aria-label` and `title` |
+| `gridcore-select` | a `<select>` |
+
+```tsx
+ToolbarItem: ({ ctx }) => (
+  <>
+    <select className="gridcore-select" aria-label="Density">
+      <option>Compact</option>
+      <option>Comfortable</option>
+    </select>
+    <button type="button" className="gridcore-btn gridcore-btn--primary">
+      Apply
+    </button>
+  </>
+),
+```
+
+Colours come from CSS custom properties set on `.gridcore-dashboard`
+(`--gridcore-ink`, `--gridcore-line`, `--gridcore-accent` and friends), so a
+plugin's own CSS can use them too.
 
 ## Source map
 
@@ -143,9 +224,15 @@ packages/grid-core/src/
 ├── types.ts                        GridCoreConfig, GridCoreColumn, GridPlugin
 ├── GridCore.tsx                    the component; AG Grid lives here
 ├── GridCore.css                    shell layout only
+├── dashboard/                      the dashboard above the grid
+│   ├── Dashboard.tsx               state, header, panels
+│   ├── dashboardModel.ts           tabs and visibility (pure)
+│   └── dashboard.css               light theme and the shared gridcore-btn classes
+├── plugins/                        the built-in layouts and actions plugins
 └── internal/
     ├── licence.ts                  setLicenseKey, at most once
     ├── buildGridOptions.ts         our config -> AG Grid options (pure)
+    ├── icons.tsx                   small inline SVG icons
     └── runPlugins.ts               the plugin pipeline
 ```
 

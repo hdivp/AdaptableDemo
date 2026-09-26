@@ -24,6 +24,14 @@ export interface GridCoreColumn<TRow = unknown> {
   agColDef?: ColDef<TRow>;
 }
 
+/** One dashboard tab: a name and the toolbars it shows. */
+export interface GridCoreTab {
+  /** Tab label. */
+  name: string;
+  /** Plugin ids in display order. Unknown ids are ignored. */
+  toolbars: string[];
+}
+
 /** Everything the wrapper needs to build a grid, apart from the rows. */
 export interface GridCoreConfig<TRow = unknown> {
   /**
@@ -45,6 +53,10 @@ export interface GridCoreConfig<TRow = unknown> {
   height?: string | number;
   /** Features plug in here. */
   plugins?: GridPlugin<TRow>[];
+  /** Dashboard header title. Falls back to gridId. */
+  title?: string;
+  /** Absent or empty: one "Toolbars" tab with every toolbar, in plugin order. */
+  tabs?: GridCoreTab[];
   /** Escape hatch. Raw AG Grid options. Merged last, so it wins. */
   agGridOptions?: GridOptions<TRow>;
 }
@@ -93,4 +105,6 @@ export interface GridPlugin<TRow = unknown> {
   onGridReady?: (ctx: GridPluginContext<TRow>) => void | (() => void);
   /** Optional control rendered in the wrapper toolbar. */
   ToolbarItem?: ComponentType<{ ctx: GridPluginContext<TRow> }>;
+  /** Title of this plugin's dashboard panel. Falls back to `id`. */
+  toolbarTitle?: string;
 }

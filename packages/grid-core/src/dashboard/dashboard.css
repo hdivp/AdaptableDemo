@@ -1,0 +1,347 @@
+/*
+ * The dashboard above the grid. One light theme only: every colour is a
+ * hard-coded token here, and `color-scheme: light` keeps native selects,
+ * checkboxes and search inputs light when the OS is in dark mode.
+ */
+.gridcore-dashboard {
+  --gridcore-ink: #1b2430;
+  --gridcore-muted: #5d6978;
+  --gridcore-line: #d5dbe3;
+  --gridcore-line-soft: #e6eaf0;
+  --gridcore-surface: #ffffff;
+  --gridcore-head: #f3f5f8;
+  --gridcore-head-hover: #e6eaf0;
+  --gridcore-panel-cap: #f7f8fa;
+  --gridcore-accent: #1f6fd1;
+  --gridcore-accent-ink: #ffffff;
+  --gridcore-accent-soft: #e3eefb;
+  --gridcore-danger: #c23a2b;
+  --gridcore-focus: #1f6fd1;
+  --gridcore-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  color-scheme: light;
+  flex: 0 0 auto;
+  color: var(--gridcore-ink);
+  background: var(--gridcore-surface);
+  font: 14px/1.5 var(--gridcore-font);
+}
+
+.gridcore-dashboard *,
+.gridcore-dashboard *::before,
+.gridcore-dashboard *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- Shared controls, for any panel ---------- */
+
+.gridcore-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 9px;
+  border: 1px solid var(--gridcore-line);
+  border-radius: 4px;
+  background: var(--gridcore-surface);
+  color: var(--gridcore-ink);
+  font: 500 13px/1.3 var(--gridcore-font);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.gridcore-btn:hover {
+  border-color: var(--gridcore-accent);
+  color: var(--gridcore-accent);
+}
+
+.gridcore-btn--primary {
+  border-color: var(--gridcore-accent);
+  background: var(--gridcore-accent);
+  color: var(--gridcore-accent-ink);
+}
+
+.gridcore-btn--primary:hover {
+  filter: brightness(1.08);
+  color: var(--gridcore-accent-ink);
+}
+
+.gridcore-btn--icon {
+  padding: 5px 6px;
+}
+
+.gridcore-btn:disabled,
+.gridcore-btn:disabled:hover {
+  border-color: var(--gridcore-line);
+  color: var(--gridcore-ink);
+  filter: none;
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.gridcore-select {
+  min-width: 150px;
+  padding: 5px 8px;
+  border: 1px solid var(--gridcore-line);
+  border-radius: 4px;
+  background: var(--gridcore-surface);
+  color: var(--gridcore-ink);
+  font: 13px/1.3 var(--gridcore-font);
+}
+
+/* ---------- Header ---------- */
+
+.gridcore-dashboard-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  min-height: 42px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--gridcore-line);
+  background: var(--gridcore-head);
+}
+
+.gridcore-dashboard-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-block: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.gridcore-dashboard-brand svg {
+  color: var(--gridcore-accent);
+}
+
+.gridcore-dashboard-brand small {
+  color: var(--gridcore-muted);
+  font: 400 12px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.gridcore-dashboard-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-self: stretch;
+  gap: 2px;
+}
+
+.gridcore-dashboard-tab {
+  align-self: end;
+  padding: 8px 14px 9px;
+  border: 0;
+  border-radius: 5px 5px 0 0;
+  background: transparent;
+  color: var(--gridcore-muted);
+  font: 500 13px/1.3 var(--gridcore-font);
+  cursor: pointer;
+}
+
+.gridcore-dashboard-tab:hover {
+  color: var(--gridcore-ink);
+}
+
+.gridcore-dashboard-tab[aria-selected="true"] {
+  margin-bottom: -1px;
+  background: var(--gridcore-surface);
+  color: var(--gridcore-ink);
+  box-shadow:
+    inset 0 2px 0 var(--gridcore-accent),
+    1px 0 0 var(--gridcore-line),
+    -1px 0 0 var(--gridcore-line);
+}
+
+/* Collapsed: the header is the bottom edge, so the selected tab is underlined. */
+.gridcore-dashboard.is-collapsed .gridcore-dashboard-tab[aria-selected="true"] {
+  border-radius: 0;
+  background: transparent;
+  color: var(--gridcore-ink);
+  box-shadow: inset 0 -2px 0 var(--gridcore-accent);
+}
+
+.gridcore-dashboard-spacer {
+  flex: 1 1 auto;
+}
+
+.gridcore-dashboard-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding-block: 6px;
+}
+
+.gridcore-quick-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gridcore-quick-search svg {
+  position: absolute;
+  left: 8px;
+  color: var(--gridcore-muted);
+  pointer-events: none;
+}
+
+.gridcore-quick-search input {
+  width: 190px;
+  max-width: 100%;
+  padding: 5px 8px 5px 28px;
+  border: 1px solid var(--gridcore-line);
+  border-radius: 4px;
+  background: var(--gridcore-surface);
+  color: var(--gridcore-ink);
+  font: 13px/1.3 var(--gridcore-font);
+}
+
+.gridcore-quick-search input::placeholder {
+  color: var(--gridcore-muted);
+}
+
+.gridcore-dashboard-vsep {
+  width: 1px;
+  height: 20px;
+  margin-inline: 2px;
+  background: var(--gridcore-line);
+}
+
+.gridcore-dashboard-ibtn {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--gridcore-ink);
+  cursor: pointer;
+}
+
+.gridcore-dashboard-ibtn:hover {
+  border-color: var(--gridcore-line);
+  background: var(--gridcore-head-hover);
+}
+
+/* ---------- Panels ---------- */
+
+.gridcore-dashboard-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid var(--gridcore-line);
+  background: var(--gridcore-surface);
+}
+
+.gridcore-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--gridcore-line);
+  border-radius: 4px;
+  background: var(--gridcore-surface);
+}
+
+.gridcore-panel-cap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 2px 4px 2px 8px;
+  border-bottom: 1px solid var(--gridcore-line-soft);
+  border-radius: 4px 4px 0 0;
+  background: var(--gridcore-panel-cap);
+  color: var(--gridcore-muted);
+  font: 600 11px/1.5 var(--gridcore-font);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.gridcore-panel-hide {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--gridcore-muted);
+  cursor: pointer;
+}
+
+.gridcore-panel-hide:hover {
+  background: var(--gridcore-line-soft);
+  color: var(--gridcore-ink);
+}
+
+.gridcore-panel-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+}
+
+/* ---------- Settings pop-up ---------- */
+
+.gridcore-popover-anchor {
+  position: relative;
+}
+
+.gridcore-popover {
+  position: absolute;
+  top: 36px;
+  right: 0;
+  z-index: 1000;
+  width: 260px;
+  padding: 10px 12px;
+  border: 1px solid var(--gridcore-line);
+  border-radius: 6px;
+  background: var(--gridcore-surface);
+  color: var(--gridcore-ink);
+  box-shadow: 0 10px 28px rgba(10, 20, 35, 0.22);
+}
+
+.gridcore-popover h3 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.gridcore-popover p {
+  margin: 0 0 8px;
+  color: var(--gridcore-muted);
+  font-size: 12px;
+}
+
+.gridcore-popover label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.gridcore-dashboard-empty {
+  margin: 0;
+  padding: 6px 2px;
+  color: var(--gridcore-muted);
+  font-size: 13px;
+}
+
+.gridcore-actions-format {
+  min-width: 110px;
+}
+
+/* ---------- Focus ---------- */
+
+.gridcore-dashboard button:focus-visible,
+.gridcore-dashboard input:focus-visible,
+.gridcore-dashboard select:focus-visible {
+  outline: 2px solid var(--gridcore-focus);
+  outline-offset: 1px;
+}

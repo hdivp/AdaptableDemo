@@ -1,6 +1,6 @@
 /*
  * Shell layout only. The grid itself is styled by the AG Grid theme, so this
- * file just stacks a toolbar above a grid that fills the space left over.
+ * file just stacks the dashboard above a grid that fills the space left over.
  */
 .gridcore-root {
   display: flex;
@@ -8,15 +8,6 @@
   min-height: 0;
   height: 100%;
   position: relative;
-}
-
-.gridcore-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .gridcore-viewport {

@@ -20,6 +20,7 @@ export type {
   GridCoreConfig,
   GridCoreDataType,
   GridCoreProps,
+  GridCoreTab,
   GridPlugin,
   GridPluginContext,
 } from "./types";

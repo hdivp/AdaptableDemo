@@ -1,7 +1,7 @@
 feature: Toolbar actions
 slug: toolbar-actions
-stage: tester
-gate: running
+stage: done
+gate: closed
 question_rounds: 0
 retries_developer: 0
 fsd_source: .aidlc/toolbar-actions/01-fsd.md

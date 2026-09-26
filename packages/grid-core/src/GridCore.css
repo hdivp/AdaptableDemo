@@ -1,0 +1,37 @@
+/*
+ * Shell layout only. The grid itself is styled by the AG Grid theme, so this
+ * file just stacks a toolbar above a grid that fills the space left over.
+ */
+.gridcore-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  position: relative;
+}
+
+.gridcore-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.gridcore-viewport {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.gridcore-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.6);
+  font: 500 13px/1.4 system-ui, sans-serif;
+}

@@ -1,0 +1,19 @@
+# The only project-specific file in the AIDLC flow.
+# To reuse the flow elsewhere, copy .claude/skills/aidlc* and .claude/agents/aidlc-*
+# then rewrite this file. Nothing else knows about this project.
+
+conventions_file: CLAUDE.md
+fsd_search: ["docs/**/*fsd*.md", "docs/FSD.md", "FSD.md", "docs/requirements.md"]
+verify_fast: ["npm run typecheck"]
+verify_full: ["npm run typecheck", "npm run build"]
+doc_mcp: ["ag-mcp"]
+doc_mcp_setup: "Set the version before searching: version 32.2.0, framework react. Version detection fails at the repository root because the root manifest is a workspace root."
+source_roots: ["packages", "apps"]
+test_command: none
+
+# How the tester drives the running app. Leave browser_mcp empty to turn
+# browser checks off; the tester then says so in its report.
+app_start: "npm run dev"
+app_url: "http://localhost:5173"
+app_ready_seconds: 40
+browser_mcp: ["claude-in-chrome", "playwright"]

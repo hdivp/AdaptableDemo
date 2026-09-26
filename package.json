@@ -1,0 +1,20 @@
+{
+  "name": "grid-aidlc",
+  "private": true,
+  "version": "0.1.0",
+  "description": "AG Grid wrapper library (grid-core) plus a demo app that consumes it.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @grid-aidlc/demo",
+    "build:core": "npm run build --workspace @grid-aidlc/core",
+    "build": "npm run build:core && npm run build --workspace @grid-aidlc/demo",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "clean": "rm -rf packages/*/dist apps/*/dist"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

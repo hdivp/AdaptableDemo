@@ -3,6 +3,7 @@
 # then rewrite this file. Nothing else knows about this project.
 
 conventions_file: CLAUDE.md
+project_memory: .aidlc/decisions.md
 fsd_search: ["docs/**/*fsd*.md", "docs/FSD.md", "FSD.md", "docs/requirements.md"]
 verify_fast: ["npm run typecheck"]
 verify_full: ["npm run typecheck", "npm run build"]

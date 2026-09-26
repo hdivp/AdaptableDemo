@@ -5,9 +5,12 @@ For each task, in plan order:
 1. Read that task's row in `03-plan.md`. Read only that row.
 2. Read the files the row names. Read nothing else unless the change needs it.
 3. Make the change.
-4. Run the `verify_fast` commands from the config. If a library call is involved
-   and it fails, check the library documentation server before you change the call
-   again.
+4. Run the `verify_fast` commands from the config. This is your only proof the
+   task works. Do not also open a browser, start the app, or write a throwaway
+   script to click through the change - that is the tester's job, and doing it
+   here checks the same thing twice for triple the cost. If a library call is
+   involved and it fails, check the library documentation server before you
+   change the call again.
 5. Fix what you broke. Never leave a failing type check for the next task.
 6. Append one line to `04-progress.md`.
 7. Move to the next task.

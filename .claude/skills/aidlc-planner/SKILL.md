@@ -38,8 +38,9 @@ stories. Tracing them again costs tokens and buys nothing.
 - Mark each task's dependencies by id. Leave the column empty when there are none.
 - Every story must be fully covered by its tasks, and every task must name its
   story. Fill in the coverage table to prove it.
-- Add one last task per story that exercises its acceptance criteria, unless the
-  earlier tasks already do.
+- Do not add a task to prove a story's acceptance criteria. That is the tester's
+  job, once, at the end. A task here is done when the code and the fast check
+  say so, nothing more.
 - No task may change a pinned dependency version.
 - Plan no refactor the architecture did not ask for.
 

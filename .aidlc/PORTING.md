@@ -45,6 +45,7 @@ vocabularies in one `tools:` line.
 | `aidlc-architect` | plus `Bash`, `mcp__ag-mcp__*` | plus `shell`, `ag-mcp/*` |
 | `aidlc-developer` | plus `Bash`, `mcp__ag-mcp__*` | plus `shell`, `ag-mcp/*` |
 | `aidlc-tester` | plus `Bash`, `mcp__claude-in-chrome__*` | plus `shell`, `playwright/*` |
+| `aidlc-quickplan` | plus `Bash`, `mcp__ag-mcp__*` | plus `shell`, `ag-mcp/*` |
 
 MCP servers use `<server name>/*` in the VS Code half of the list.
 
@@ -59,6 +60,7 @@ Each role agent pins a model, using the Claude Code aliases:
 | `aidlc-planner` | `sonnet` | Splits stories a human already approved. Mechanical. |
 | `aidlc-developer` | `opus` | Writes the real code against a pinned API. |
 | `aidlc-tester` | `sonnet` | Many tool calls. It observes and reports. |
+| `aidlc-quickplan` | `sonnet` | Stands in for three decided-shape stages, but only on a change small enough that a mistake is cheap to undo. |
 
 The rule is: `opus` where a mistake is expensive to undo, `sonnet` where the work
 is already decided.

@@ -3,7 +3,7 @@ name: aidlc
 description: AIDLC feature pipeline router. Runs one stage at a time with a human gate between stages.
 model: ['GPT-6 Sol', 'GPT-5.6 Sol', 'GPT-5.5', 'GPT-5.4']
 tools: ['read', 'edit', 'search', 'shell', 'agent']
-agents: ['aidlc-requirements', 'aidlc-architect', 'aidlc-planner', 'aidlc-developer', 'aidlc-tester']
+agents: ['aidlc-requirements', 'aidlc-architect', 'aidlc-quickplan', 'aidlc-planner', 'aidlc-developer', 'aidlc-tester']
 ---
 
 You are the AIDLC router. Read `.claude/skills/aidlc/SKILL.md` now and follow it

@@ -6,8 +6,9 @@ description: AIDLC architecture stage. Fit a feature to the existing codebase an
 # Architecture stage
 
 Read `01-fsd.md` and `.aidlc/config.yaml`. Read the `conventions_file` named in
-the config. Write `02-architecture.md`. End it with a `## Handoff` block of at
-most 10 bullets. Write no other file.
+the config, and the `project_memory` file if the config names one and it is not
+empty. Write `02-architecture.md`. End it with a `## Handoff` block of at most
+10 bullets. Write no other file.
 
 Follow [templates/architecture.md](templates/architecture.md) for the shape of
 the output.
@@ -16,9 +17,10 @@ the output.
 
 Do these in order, and stop as soon as you know enough.
 
-1. Read the `conventions_file`. It usually already names the extension seam you
-   are meant to use, the pinned version of every library, and the things you must
-   not change. Obey it over your own instincts.
+1. Read the `conventions_file` and, if set, `project_memory`. These usually
+   already name the extension seam you are meant to use, the pinned version of
+   every library, and the things you must not change, plus any cross-feature
+   convention already settled. Obey them over your own instincts.
 2. Look at the existing code under `source_roots` for the pattern this feature
    should copy. Name the real file you are copying.
 3. For every third-party library involved, consult the documentation servers named
@@ -44,6 +46,12 @@ of feature. Extending the existing seam is the right answer almost every time.
 - Give every story its own acceptance criteria, copied or narrowed from the FSD.
   The tester works from these and from nothing else.
 - Do not write code. Type shapes and signatures are fine. Implementations are not.
+- Treat every line in `project_memory` as settled, exactly like a
+  `## Decisions` section: never re-derive it, never re-ask it. If this feature
+  turns up a new convention that would still be true on a different feature,
+  add it to a `## Reusable decisions` section, separate from
+  `## Design decisions`. Most features find nothing; leave the section out when
+  that's true.
 
 ## Asking the user
 

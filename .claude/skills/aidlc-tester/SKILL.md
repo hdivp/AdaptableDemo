@@ -5,9 +5,12 @@ description: AIDLC test stage. Drive the running app to check every story's acce
 
 # Test stage
 
-Read `.aidlc/config.yaml`, the `## Story acceptance criteria` table in
-`02-architecture.md`, and `04-progress.md`. Write `05-test-report.md`. End it with
-a `## Handoff` block of at most 10 bullets. Write no other file.
+Read `.aidlc/config.yaml` and `04-progress.md`. Read acceptance criteria from
+`02-architecture.md`'s `## Story acceptance criteria` table if that file
+exists, or from `03-plan.md`'s `## Acceptance criteria` table if it does not (a
+`profile: quick` feature has no `02-architecture.md`). Write
+`05-test-report.md`. End it with a `## Handoff` block of at most 10 bullets.
+Write no other file.
 
 Follow [templates/test-report.md](templates/test-report.md) for the shape of the
 output.
@@ -18,6 +21,13 @@ Only the acceptance criteria. One verdict per story. You are not a code reviewer
 Do not report style, naming, or design opinions.
 
 Run every `verify_full` command once, at the start, and record the exact result.
+
+## Quick-profile features have one story
+
+A `profile: quick` feature has no formal user stories. Treat the whole feature
+as a single story, `QF-01`, in your `## Story verdicts` table, and check it
+against every criterion in `03-plan.md`'s `## Acceptance criteria` table.
+Everything else about checking and reporting stays the same.
 
 ## The verification ladder
 

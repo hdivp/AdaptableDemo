@@ -21,6 +21,7 @@ Flat `key: value`, plus simple inline lists.
 | `app_url` | Where the started app answers. |
 | `app_ready_seconds` | How long to wait for it before giving up. |
 | `browser_mcp` | Names of MCP servers that drive a browser, as candidates in order. The tester uses the first one connected in this session, so one config serves every editor. Empty turns browser checks off. |
+| `project_memory` | Path to the project-wide durable-decisions file. Router-only writer. Point at it; create if missing. |
 
 `verify_fast` and `verify_full` are split on purpose. Without the split, the
 developer runs a full build after every task, which is slow and wasteful.
@@ -45,8 +46,25 @@ Create it before any stage runs. Infer the values:
 - `app_ready_seconds`: `40` is a safe start.
 - `browser_mcp`: the browser-driving MCP servers in this session. Use `[]` if
   there are none.
+- `project_memory`: `.aidlc/decisions.md`.
 
 Show the config to the user and let them correct it before the first stage runs.
+
+## If project_memory points at a file that does not exist yet
+
+Create it empty, with just this header, before the first architect or quickplan
+stage reads it:
+
+```
+# Project decisions
+
+Durable, cross-feature conventions, settled by prior features. Read once at the
+start of the architect and quickplan stages. Never re-derive or re-ask
+something already listed here.
+```
+
+If `project_memory` itself is missing from `config.yaml`, treat it as
+`.aidlc/decisions.md` and create that file the same way.
 
 ## Why the tester needs an app to drive
 

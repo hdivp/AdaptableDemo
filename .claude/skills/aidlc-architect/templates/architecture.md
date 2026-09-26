@@ -33,6 +33,9 @@
 | Risk | What to do about it |
 | --- | --- |
 
+## Reusable decisions
+- <a durable, cross-feature convention worth keeping, or omit this section>
+
 ## Open questions
 - Q1: <question> (recommended: <default>)
 

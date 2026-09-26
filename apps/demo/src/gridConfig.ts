@@ -1,13 +1,20 @@
-import { createLayoutPlugin, type GridCoreConfig } from "@grid-aidlc/core";
+import {
+  createActionsPlugin,
+  createLayoutPlugin,
+  type GridCoreConfig,
+  type GridPlugin,
+} from "@grid-aidlc/core";
 import type { Trade } from "./data/trades";
 import { getSavedLayouts, layoutHandlers } from "./layoutsDb";
 
-// Test switches: `?layouts=off` renders the grid with no plugin at all,
-// `?layouts=empty` binds the feature with an empty list, and
-// `?initialLayout=<id>` starts the grid in that layout.
+// Test switches: `?layouts=off` leaves out the layouts plugin,
+// `?layouts=empty` binds it with an empty list, `?initialLayout=<id>` starts
+// the grid in that layout, and `?actions=off` leaves out the actions plugin.
+// Both switches off renders the grid with no plugin at all.
 const params = new URLSearchParams(window.location.search);
 const layoutsMode = params.get("layouts");
 const initialLayoutId = params.get("initialLayout") ?? undefined;
+const actionsMode = params.get("actions");
 
 /**
  * Saved layouts. Created once, at module level, so the same plugin stays in
@@ -18,6 +25,16 @@ export const tradeLayouts = createLayoutPlugin<Trade>({
   initialLayoutId,
   ...layoutHandlers,
 });
+
+/** Toolbar actions. Created once, at module level, like `tradeLayouts`. */
+export const tradeActions = createActionsPlugin<Trade>({
+  actions: ["fitColumns", "autosizeColumns", "exportCsv", "exportExcel"],
+});
+
+const plugins: GridPlugin<Trade>[] = [
+  ...(layoutsMode === "off" ? [] : [tradeLayouts.plugin]),
+  ...(actionsMode === "off" ? [] : [tradeActions.plugin]),
+];
 
 /**
  * Everything the demo tells the wrapper. Note what is missing: no ColDef and
@@ -37,7 +54,7 @@ export const tradeGridConfig: GridCoreConfig<Trade> = {
     { field: "tradeDate", dataType: "date", width: 160 },
     { field: "settled", dataType: "boolean", width: 130 },
   ],
-  plugins: layoutsMode === "off" ? undefined : [tradeLayouts.plugin],
+  plugins: plugins.length === 0 ? undefined : plugins,
   // Raw AG Grid options still work. Here they spread the columns across the
   // full width on first render, and turn on grouping, pivot, aggregation and
   // multi-row selection so every part of a layout can be exercised.

@@ -21,8 +21,7 @@ The consumer picks which buttons appear; every button acts on the grid immediate
 | FR-06 | "Fit columns" scales every column to fill the grid's width, keeping relative proportions. | Click leaves no empty space to the right of the last column and no horizontal scrollbar, if the sum of min-widths allows it. |
 | FR-07 | Buttons act on the grid state at the moment of the click (current sort, filter, grouping); no event is emitted to the consumer for any action. | Filter the grid, click Export CSV; the file reflects only the filtered rows. No callback fires. |
 | FR-08 | This plugin's toolbar buttons appear alongside any other plugin's toolbar controls (e.g. the Layout button), in `config.plugins` order. | Enabling both layouts and toolbar-actions shows both controls in one toolbar strip, ordered by plugin array position. |
-| FR-09 | Export buttons are hidden (not shown disabled) if the underlying export is unavailable — e.g. Excel export with no AG Grid Enterprise licence still exports, but with the trial watermark AG Grid itself adds. | No custom "unavailable" state is invented; AG Grid's own trial behaviour is left as-is. |
-| FR-10 | The feature is delivered as a `GridPlugin` and the demo/app never imports AG Grid (CLAUDE.md rules). | Demo enables it through `config.plugins`; no AG Grid import outside `packages/grid-core/src`. |
+| FR-09 | The feature is delivered as a `GridPlugin` and the demo/app never imports AG Grid (CLAUDE.md rules). | Demo enables it through `config.plugins`; no AG Grid import outside `packages/grid-core/src`. |
 
 ## Acceptance criteria
 | Id | Covers | Given / When / Then |
@@ -35,7 +34,7 @@ The consumer picks which buttons appear; every button acts on the grid immediate
 | AC-06 | FR-06 | Given columns narrower than the grid's width, when the user clicks "Fit columns", then the columns scale up to fill the width. |
 | AC-07 | FR-07 | Given the grid is filtered to a subset of rows, when the user clicks "Export CSV", then only the filtered rows appear in the file. |
 | AC-08 | FR-08 | Given both the layouts plugin and this plugin are bound, when the grid renders, then one toolbar shows both the Layout button and the action buttons. |
-| AC-09 | FR-10 | Given the demo enables the plugin, when the code is inspected, then no AG Grid import exists outside `packages/grid-core/src`. |
+| AC-09 | FR-09 | Given the demo enables the plugin, when the code is inspected, then no AG Grid import exists outside `packages/grid-core/src`. |
 
 ## Data
 | Field | Type | Rule |
@@ -48,6 +47,7 @@ The consumer picks which buttons appear; every button acts on the grid immediate
 - A "reset columns" or "clear filters" button — reset-to-default already exists on the Layout plugin's Default button.
 - Printing.
 - Disabling individual buttons based on grid state (e.g. greying out Export when the grid is empty).
+- Any custom "unavailable" state for export buttons (e.g. hiding or greying out Excel export with no AG Grid Enterprise licence) — AG Grid's own default behaviour (e.g. the trial watermark) is left as-is.
 - Changes to `GridCore.tsx` beyond what the existing plugin seam allows; version bumps of react, ag-grid, vite or typescript.
 
 ## Non-functional
@@ -63,7 +63,6 @@ User asked to add a "toolbar" feature to the grid wrapper, matching what AdapTab
 - Scope narrowed from "toolbar" in general to a specific, closed list of stateless actions (export CSV/Excel, auto-size, fit-to-width), since the toolbar *shell* already exists (`GridCore` renders one automatically once any plugin supplies a `ToolbarItem`) — this FSD only adds a new plugin that fills it with buttons.
 - "Filter" and "layout save" from the AdapTable comparison are deliberately excluded: layout save is already its own delivered feature, and filter-building is covered by the separate "Smart filter UI" and "Advanced search" FSDs.
 - No confirmation grid button (e.g. "are you sure?") before export, since export is non-destructive.
-- Needs a human check: confirm the exact AG Grid v32 API method name for Excel export before implementation (expected `exportDataAsExcel`, symmetric with `exportDataAsCsv`) — verify with `ag-mcp` `search_docs` at build time rather than trusting this document.
 
 ## Handoff
 - Opt-in `GridPlugin` via `config.plugins`: no popup, just buttons wired straight to AG Grid API calls (`exportDataAsCsv`, `exportDataAsExcel`, `autoSizeAllColumns`, `sizeColumnsToFit`).
@@ -71,5 +70,6 @@ User asked to add a "toolbar" feature to the grid wrapper, matching what AdapTab
 - No store, no events, no persistence — this is the simplest plugin in the set; treat it as the first one built.
 - Coexists with the layouts plugin's toolbar item; `GridCore` already renders all plugins' `ToolbarItem`s side by side in `config.plugins` order — no change to `GridCore.tsx` needed.
 - AG Grid imports stay inside `packages/grid-core/src`; no feature code in `GridCore.tsx`.
-- AG Grid 32 + React 18: confirmed via ag-mcp — `exportDataAsCsv`, `autoSizeAllColumns`, `sizeColumnsToFit` all exist in v32; Excel export method name to be re-confirmed at build time.
+- AG Grid 32 + React 18 confirmed via ag-mcp for `exportDataAsCsv`, `autoSizeAllColumns`, `sizeColumnsToFit`; re-confirm the exact Excel export method name (expected `exportDataAsExcel`) with `ag-mcp` `search_docs` before implementing FR-04.
 - Assumed: filenames are `<gridId>.csv` / `<gridId>.xlsx`; no per-call filename override in this iteration.
+- No "unavailable"/disabled state to build for export buttons — leave AG Grid's own licence/trial behaviour (e.g. watermark) as-is.
